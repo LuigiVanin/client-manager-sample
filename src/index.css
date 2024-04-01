@@ -4,6 +4,7 @@
 
 * {
   font-family: 'Inter', sans-serif;
+  box-sizing: border-box;
 }
 
 @layer base {
@@ -49,7 +50,7 @@
     --background: 225 80% 8%;
     --foreground: 220 10% 97.2%;
 
-    --muted: 220 50% 13.2%;
+    --muted: 220 50% 15.2%;
     --muted-foreground: 220 10% 54.4%;
 
     --popover: 220 45% 5.72%;
