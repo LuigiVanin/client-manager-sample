@@ -11,7 +11,7 @@
   :root {
     --gradient: linear-gradient(to top left, #007adf, #00ecbc);
 
-    --background: 216 100% 98.04%;
+    --background: 216 100% 99%;
     --foreground: 213.6 100% 4.9%;
 
     --primary: 214.12 100% 50%;
@@ -47,7 +47,7 @@
 
     --gradient: linear-gradient(to top left, #007adf, #00ecbc);
 
-    --background: 225 80% 8%;
+    --background: 225 80% 6%;
     --foreground: 220 10% 97.2%;
 
     --muted: 220 50% 15.2%;

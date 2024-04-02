@@ -24,6 +24,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Link } from "react-router-dom";
 
 const initialData: Customer[] = [
   {
@@ -71,88 +80,11 @@ export type Customer = {
   createdAt: Date;
 };
 
-export const columns: ColumnDef<Customer>[] = [
-  // {
-  //   id: "select",
-  //   header: ({ table }) => (
-  //     <Checkbox
-  //       checked={
-  //         table.getIsAllPageRowsSelected() ||
-  //         (table.getIsSomePageRowsSelected() && "indeterminate")
-  //       }
-  //       onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-  //       className="border-muted-foreground data-[state=checked]:border-primary"
-  //       aria-label="Select all"
-  //     />
-  //   ),
-  //   cell: ({ row }) => (
-  //     <Checkbox
-  //       checked={row.getIsSelected()}
-  //       onCheckedChange={(value) => row.toggleSelected(!!value)}
-  //       className="border-muted-foreground data-[state=checked]:border-primary"
-  //       aria-label="Select row"
-  //     />
-  //   ),
-  //   enableSorting: false,
-  //   enableHiding: false,
-  // },
-  {
-    accessorKey: "name",
-    header: "Name",
-    cell: ({ row }) => <div className="capitalize">{row.getValue("name")}</div>,
-  },
-  {
-    accessorKey: "email",
-    header: () => {
-      return <div className="">Email</div>;
-    },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
-  },
-  {
-    accessorKey: "phone",
-    header: () => {
-      return <div className="">Phone</div>;
-    },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("phone")}</div>,
-  },
-  {
-    accessorKey: "createdAt",
-    header: ({ column }) => (
-      <Button
-        variant="ghost"
-        className="w-full justify-start gap-2 pl-0 text-left hover:bg-transparent"
-        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-      >
-        Date
-        <PiCaretUpDown />
-      </Button>
-    ),
-    enableSorting: true,
-    cell: ({ row }) => {
-      const date = row.getValue<Date>("createdAt");
-
-      return (
-        <div className="text-left font-medium">{date.toLocaleDateString()}</div>
-      );
-    },
-  },
-  {
-    accessorKey: "action",
-    header: () => {
-      return <div className=""></div>;
-    },
-    cell: () => (
-      <Button
-        variant="ghost"
-        className="h-8 w-8 p-0"
-      >
-        <BsThreeDots size="1.5rem" />
-      </Button>
-    ),
-  },
-];
-
-export function CustomerTable() {
+export function CustomerTable({
+  onCustomerDelete,
+}: {
+  onCustomerDelete?: (id: string) => void;
+}) {
   const [Customers, setCustomers] = useState<Customer[]>(initialData);
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -160,6 +92,88 @@ export function CustomerTable() {
   const [rowSelection, setRowSelection] = useState({});
 
   setCustomers;
+
+  const columns: ColumnDef<Customer>[] = [
+    {
+      accessorKey: "name",
+      header: "Name",
+      cell: ({ row }) => (
+        <div className="capitalize">{row.getValue("name")}</div>
+      ),
+    },
+    {
+      accessorKey: "email",
+      header: () => {
+        return <div className="">Email</div>;
+      },
+      cell: ({ row }) => (
+        <div className="lowercase">{row.getValue("email")}</div>
+      ),
+    },
+    {
+      accessorKey: "phone",
+      header: () => {
+        return <div className="">Phone</div>;
+      },
+      cell: ({ row }) => (
+        <div className="lowercase">{row.getValue("phone")}</div>
+      ),
+    },
+    {
+      accessorKey: "createdAt",
+      header: ({ column }) => (
+        <Button
+          variant="ghost"
+          className="w-full justify-start gap-2 pl-0 text-left hover:bg-transparent"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Date
+          <PiCaretUpDown />
+        </Button>
+      ),
+      enableSorting: true,
+      cell: ({ row }) => {
+        const date = row.getValue<Date>("createdAt");
+
+        return (
+          <div className="text-left font-medium">
+            {date.toLocaleDateString()}
+          </div>
+        );
+      },
+    },
+    {
+      accessorKey: "action",
+      header: () => {
+        return <div className=""></div>;
+      },
+      cell: ({ row }) => (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="ghost"
+              className="h-8 w-8 p-0"
+            >
+              <BsThreeDots size="1.5rem" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            <Link to={`/customer/update/${row.original.id}`}>
+              <DropdownMenuItem>Edit Customer</DropdownMenuItem>
+            </Link>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              className="hover:!bg-destructive/90 hover:!text-white"
+              onClick={() => onCustomerDelete?.(row.original.id)}
+            >
+              Delete Customer
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      ),
+    },
+  ];
 
   const table = useReactTable<Customer>({
     data: Customers,
@@ -183,7 +197,7 @@ export function CustomerTable() {
   return (
     <div className="w-full">
       <div className="rounded-md border">
-        <Table>
+        <Table className="rounded-md">
           <TableHeader className="">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
@@ -236,6 +250,7 @@ export function CustomerTable() {
         <div className="space-x-2">
           <Button
             variant="outline"
+            className="bg-popover"
             size="sm"
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
@@ -244,6 +259,7 @@ export function CustomerTable() {
           </Button>
           <Button
             variant="outline"
+            className="bg-popover"
             size="sm"
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}

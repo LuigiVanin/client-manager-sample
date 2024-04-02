@@ -34,7 +34,7 @@ const phoneNumberMask: MaskitoOptions = {
   ],
 };
 
-function RegisterCostumer() {
+function EditCustomer() {
   const inputRef = useMaskito({ options: phoneNumberMask });
   const [value, setValue] = useState("");
   const navigate = useNavigate();
@@ -42,14 +42,14 @@ function RegisterCostumer() {
   return (
     <div className="flex min-h-full w-full max-w-content flex-1 flex-col items-center justify-start gap-6 bg-background px-8 py-4">
       <div className="flex w-full items-center justify-between border-b-2 border-solid border-muted pb-3">
-        <h1 className="text-lg font-semibold">Home / Register Customer</h1>
+        <h1 className="text-lg font-semibold">Home / Customer Update</h1>
       </div>
 
       <Card className="w-full">
         <CardHeader>
-          <CardTitle className="text-lg">Register Customer</CardTitle>
+          <CardTitle className="text-lg">Edit Customer</CardTitle>
           <CardDescription>
-            Fill the form with all the proper data to register a new customer.
+            Fill the form with all the proper data to edit a customer.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -106,4 +106,4 @@ function RegisterCostumer() {
   );
 }
 
-export default RegisterCostumer;
+export default EditCustomer;

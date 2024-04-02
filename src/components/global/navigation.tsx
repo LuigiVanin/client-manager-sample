@@ -24,7 +24,7 @@ export const Navigation = () => {
               to="/"
               className="text-strong rounded-sm  px-2 py-1 text-sm transition-all duration-150 hover:bg-foreground/10 hover:text-foreground hover:underline"
             >
-              Clients
+              Customers
             </Link>
           </nav>
           <Switch
