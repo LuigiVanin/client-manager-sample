@@ -1,9 +1,13 @@
-import { CustomerTable } from "@/components/customer/customer-table";
-import { Button } from "@/components/ui/button";
+import { useMemo, useState } from "react";
 import { GrAdd as AddIcon } from "react-icons/gr";
 import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { CustomerTable } from "@/components/customer/customer-table";
 import { Modal, ModalDescription, ModalTitle } from "@/components/global/modal";
-import { useMemo, useState } from "react";
+import {
+  useFetchCustomers,
+  useDeleteCustomer,
+} from "@/hooks/api/use-customers";
 
 function Home() {
   const [customerDeleteId, setCustomerDeleteId] = useState<string | null>(null);
@@ -12,7 +16,17 @@ function Home() {
     [customerDeleteId],
   );
 
+  const { data, isLoading } = useFetchCustomers();
+  const { mutate: deleteCustomer } = useDeleteCustomer();
+
   const clearCustomerDeleteId = () => setCustomerDeleteId(null);
+
+  const handleDeleteCustomer = () => {
+    if (customerDeleteId) {
+      deleteCustomer(customerDeleteId);
+      clearCustomerDeleteId();
+    }
+  };
 
   return (
     <div className="flex min-h-full w-full max-w-content flex-1 flex-col items-center justify-start gap-6 bg-background px-8 py-4">
@@ -29,7 +43,11 @@ function Home() {
         </Link>
       </div>
 
-      <CustomerTable onCustomerDelete={(id) => setCustomerDeleteId(id)} />
+      <CustomerTable
+        loading={isLoading}
+        customers={data || []}
+        onCustomerDelete={(id) => setCustomerDeleteId(id)}
+      />
       <Modal
         open={openDeleteCustomerModal}
         onOverlayClick={clearCustomerDeleteId}
@@ -49,7 +67,12 @@ function Home() {
           >
             Cancelar
           </Button>
-          <Button variant="destructive"> Deletar </Button>
+          <Button
+            variant="destructive"
+            onClick={handleDeleteCustomer}
+          >
+            Deletar
+          </Button>
         </footer>
       </Modal>
     </div>

@@ -10,10 +10,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { GrAdd as AddIcon } from "react-icons/gr";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useMaskito } from "@maskito/react";
 import type { MaskitoOptions } from "@maskito/core";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { useFetchCustomerById } from "@/hooks/api/use-customers";
 
 const phoneNumberMask: MaskitoOptions = {
   mask: [
@@ -37,7 +38,26 @@ const phoneNumberMask: MaskitoOptions = {
 function EditCustomer() {
   const inputRef = useMaskito({ options: phoneNumberMask });
   const [value, setValue] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
   const navigate = useNavigate();
+  const params = useParams();
+
+  const { data } = useFetchCustomerById(params.id);
+
+  useEffect(() => {
+    if (!params.id) {
+      navigate("/");
+    }
+  }, []);
+
+  useEffect(() => {
+    if (data) {
+      setValue(data.phone);
+      setFullName(data.fullName);
+      setEmail(data.email);
+    }
+  }, [data]);
 
   return (
     <div className="flex min-h-full w-full max-w-content flex-1 flex-col items-center justify-start gap-6 bg-background px-8 py-4">
@@ -63,6 +83,8 @@ function EditCustomer() {
                 id="name"
                 placeholder="Customer name..."
                 maxLength={100}
+                onInput={(e) => setFullName(e.currentTarget.value)}
+                value={fullName}
               />
             </div>
             <div className="flex flex-col space-y-1.5">
@@ -71,6 +93,8 @@ function EditCustomer() {
                 id="email"
                 placeholder="Customer e-mail..."
                 type="email"
+                onInput={(e) => setValue(e.currentTarget.value)}
+                value={email}
                 maxLength={100}
               />
             </div>
@@ -88,7 +112,7 @@ function EditCustomer() {
           </form>
         </CardContent>
 
-        <CardFooter className="flex gap-2">
+        <CardFooter className="mt-6 flex justify-end gap-2">
           <Button
             variant="secondary"
             className="gap-2"

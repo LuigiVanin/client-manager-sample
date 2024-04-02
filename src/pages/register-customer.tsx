@@ -10,10 +10,15 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { GrAdd as AddIcon } from "react-icons/gr";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useMaskito } from "@maskito/react";
 import type { MaskitoOptions } from "@maskito/core";
 import { useNavigate } from "react-router-dom";
+import { useCreateCustomer } from "@/hooks/api/use-customers";
+import { PiSpinnerBold } from "react-icons/pi";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 
 const phoneNumberMask: MaskitoOptions = {
   mask: [
@@ -35,9 +40,44 @@ const phoneNumberMask: MaskitoOptions = {
 };
 
 function RegisterCostumer() {
-  const inputRef = useMaskito({ options: phoneNumberMask });
   const [value, setValue] = useState("");
+  const inputRef = useMaskito({ options: phoneNumberMask });
   const navigate = useNavigate();
+  const { mutate, isPending } = useCreateCustomer();
+
+  const formSchema = z.object({
+    fullName: z.string().min(2, {
+      message: "Username must be at least 2 characters.",
+    }),
+    email: z.string().email({
+      message: "Invalid e-mail.",
+    }),
+    phone: z.string().min(14, {
+      message: "Invalid phone number.",
+    }),
+  });
+
+  const test = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      fullName: "",
+      email: "",
+      phone: "",
+    },
+  });
+
+  useEffect(() => {
+    console.log(test);
+  }, []);
+
+  const customerSubmit = () => {
+    console.log("Customer submitted");
+    mutate({
+      fullName: "Test",
+      email: "asdadsd@gmail.com",
+      phone: "12312312312",
+    });
+  };
 
   return (
     <div className="flex min-h-full w-full max-w-content flex-1 flex-col items-center justify-start gap-6 bg-background px-8 py-4">
@@ -63,7 +103,9 @@ function RegisterCostumer() {
                 id="name"
                 placeholder="Customer name..."
                 maxLength={100}
+                {...test.register("fullName")}
               />
+              {test.getValues("fullName")}
             </div>
             <div className="flex flex-col space-y-1.5">
               <Label htmlFor="email">E-mail</Label>
@@ -96,9 +138,21 @@ function RegisterCostumer() {
           >
             Cancel
           </Button>
-          <Button className="gap-2">
-            <AddIcon size="1rem" />
-            Create
+          <Button
+            className="min-w-28 gap-2"
+            onClick={customerSubmit}
+          >
+            {!isPending ? (
+              <>
+                <AddIcon size="1rem" />
+                Create
+              </>
+            ) : (
+              <PiSpinnerBold
+                size="1.5rem"
+                className="animate-slow-spin"
+              />
+            )}
           </Button>
         </CardFooter>
       </Card>

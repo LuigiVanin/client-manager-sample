@@ -14,7 +14,8 @@ import {
 } from "@tanstack/react-table";
 import { PiCaretUpDown } from "react-icons/pi";
 import { Button } from "@/components/ui/button";
-import { BsThreeDots } from "react-icons/bs"; // import { Checkbox } from "@/components/ui/checkbox";
+import { BsThreeDots } from "react-icons/bs"; //
+import { PiSpinnerBold } from "react-icons/pi";
 
 import {
   Table,
@@ -33,72 +34,28 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Link } from "react-router-dom";
-
-const initialData: Customer[] = [
-  {
-    id: "m5gr84i9",
-    name: "Luis Felipe Vanin",
-    phone: "(84) 99118-8973",
-    createdAt: new Date(),
-    email: "ken99@yahoo.com",
-  },
-  {
-    id: "3u1reuv4",
-    name: "Ken House",
-    phone: "(84) 99118-8973",
-    createdAt: new Date(),
-    email: "Abe45@gmail.com",
-  },
-  {
-    id: "derv1ws0",
-    name: "Jonh Doe",
-    phone: "(84) 99118-8973",
-    createdAt: new Date("2021-09-01"),
-    email: "Monserrat44@gmail.com",
-  },
-  {
-    id: "5kma53ae",
-    name: "Kevin",
-    phone: "(84) 99118-8973",
-    createdAt: new Date(),
-    email: "Silas22@gmail.com",
-  },
-  {
-    id: "bhqecj4p",
-    name: "Ken",
-    phone: "(84) 99118-8973",
-    createdAt: new Date(),
-    email: "carmella@hotmail.com",
-  },
-];
-
-export type Customer = {
-  id: string;
-  email: string;
-  name: string;
-  phone: string;
-  createdAt: Date;
-};
+import { Customer } from "@/types/customers";
 
 export function CustomerTable({
+  loading,
+  customers,
   onCustomerDelete,
 }: {
+  loading?: boolean;
   onCustomerDelete?: (id: string) => void;
+  customers?: Customer[];
 }) {
-  const [Customers, setCustomers] = useState<Customer[]>(initialData);
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
 
-  setCustomers;
-
   const columns: ColumnDef<Customer>[] = [
     {
-      accessorKey: "name",
+      accessorKey: "fullName",
       header: "Name",
       cell: ({ row }) => (
-        <div className="capitalize">{row.getValue("name")}</div>
+        <div className="capitalize">{row.getValue("fullName")}</div>
       ),
     },
     {
@@ -133,8 +90,8 @@ export function CustomerTable({
       ),
       enableSorting: true,
       cell: ({ row }) => {
-        const date = row.getValue<Date>("createdAt");
-
+        let date: string | Date = row.getValue<string>("createdAt");
+        if (typeof date === "string") date = new Date(date);
         return (
           <div className="text-left font-medium">
             {date.toLocaleDateString()}
@@ -176,7 +133,7 @@ export function CustomerTable({
   ];
 
   const table = useReactTable<Customer>({
-    data: Customers,
+    data: customers || [],
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -245,6 +202,15 @@ export function CustomerTable({
             )}
           </TableBody>
         </Table>
+        {loading && (
+          <span className="flex w-full items-center justify-center gap-2 py-6">
+            <PiSpinnerBold
+              size="1.5rem"
+              className="animate-slow-spin"
+            />
+            Fetching...
+          </span>
+        )}
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
         <div className="space-x-2">
