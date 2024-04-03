@@ -1,30 +1,57 @@
-# React + TypeScript + Vite
+# 📋 Customer Manager
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Welcome to the Customer Manager project! 🚀 This simple Proof of Concept (POC) amalgamates React for the frontend and Vite for the build system, showcasing basic CRUD functionalities for managing customers. Through this project, we underscore the seamless integration between frontend technologies and provide insights into modern web development practices. Feel free to explore the codebase and delve into the world of web development with Customer Manager! 💻
 
-Currently, two official plugins are available:
+The backend code can be seem in the following [repository](https://github.com/maycon-mdrs/VClients).
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### ⚙️ Project Setup
 
-## Expanding the ESLint configuration
+Before running the project, ensure to create an .env file following the structure outlined in .env.example. This file should contain all necessary environment variables for the application to function properly.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
 
-- Configure the top-level `parserOptions` property like this:
+| Variable      | Description                                        |
+|---------------|----------------------------------------------------|
+| VITE_API_URL  | The URL of the API endpoint that the frontend consumes. For local development, it is set to `http://localhost:5138/`. Ensure it points to the correct API server address. |
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
+---
+
+### 🚀 How to Run the Frontend
+
+> [!warning]
+> ⚠️ **Important Note:**  
+> It is crucial to mention that this project locally utilizes [pnpm](https://pnpm.io/pt/) (v8.9.2) instead of npm, although both should be able to interoperate without any issues.
+
+> [!note]
+> ℹ️ **System Information:**  
+> - npm  ~> v9.8.1  
+> - node ~> v18.18.2
+
+Firstly, it's necessary to install all project dependencies using npm:
+
+```bash
+$ npm i
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+To run the project in development mode, use the following command:
+
+```bash
+$ npm run dev
+```
+
+### 🛠️ How to Build the Project
+
+To build the project, execute the following command:
+
+```bash
+$ npm run build
+```
+
+### Tools used 📦
+
+-   [React](https://react.dev/)
+-   [React Query](https://tanstack.com/query/latest).
+-   [Axios](https://axios-http.com/).
+-   [Shadcn/ui](https://ui.shadcn.com/).
+-   [React Hook Form](https://react-hook-form.com/).
+-   [Vite](https://vitejs.dev/).
+-   [React icon](https://react-icons.github.io/react-icons/).
