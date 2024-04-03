@@ -1,4 +1,5 @@
 import { customerService } from "@/services/customer-service";
+import { CreateCustomer, Customer } from "@/types/customers";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const useFetchCustomers = () => {
@@ -24,10 +25,25 @@ export const useFetchCustomerById = (id?: string) => {
   return query;
 };
 
-export const useCreateCustomer = () => {
+export const useCreateCustomer = (onSuccess?: () => void) => {
   const client = useQueryClient();
   const mutate = useMutation({
     mutationFn: customerService.create,
+    onSuccess: () => {
+      client.invalidateQueries({ queryKey: ["customers-list"] });
+      onSuccess?.();
+    },
+  });
+
+  return mutate;
+};
+
+export const useUpdateCustomer = (id?: string) => {
+  if (!id) throw new Error("id is required");
+
+  const client = useQueryClient();
+  const mutate = useMutation<Customer | null, unknown, CreateCustomer>({
+    mutationFn: (customer) => customerService.update(id, customer),
     onSuccess: () => {
       client.invalidateQueries({ queryKey: ["customers-list"] });
     },

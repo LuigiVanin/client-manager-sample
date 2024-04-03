@@ -1,4 +1,4 @@
-import { CreateCustomer, Customer } from "@/types/customers";
+import { CreateCustomer, Customer, UpdateCustomer } from "@/types/customers";
 import { api } from "./api";
 
 async function fetchAllCustomers(): Promise<Customer[] | null> {
@@ -33,6 +33,19 @@ async function createCustomer(
   }
 }
 
+async function updateCustomer(
+  id: string,
+  customer: UpdateCustomer,
+): Promise<Customer | null> {
+  try {
+    const response = await api.put<Customer>(`api/Customer/${id}`, customer);
+    return response.data;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+}
+
 async function deleteCustomer(id: string): Promise<boolean> {
   try {
     await api.delete(`api/Customer/${id}`);
@@ -48,4 +61,5 @@ export const customerService = {
   fetchById: fetchCustomerById,
   create: createCustomer,
   delete: deleteCustomer,
+  update: updateCustomer,
 };

@@ -35,6 +35,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Link } from "react-router-dom";
 import { Customer } from "@/types/customers";
+import { formatPhoneNumber } from "@/lib/utils";
 
 export function CustomerTable({
   loading,
@@ -72,9 +73,14 @@ export function CustomerTable({
       header: () => {
         return <div className="">Phone</div>;
       },
-      cell: ({ row }) => (
-        <div className="lowercase">{row.getValue("phone")}</div>
-      ),
+      cell: ({ row }) => {
+        const rawPhone = row.getValue<string>("phone");
+        return (
+          <div className="lowercase">
+            {formatPhoneNumber(rawPhone) || rawPhone}
+          </div>
+        );
+      },
     },
     {
       accessorKey: "createdAt",
