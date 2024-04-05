@@ -43,7 +43,7 @@ After all, ensure to create an .env file following the structure outlined in .en
 
 | Variable      | Description                                        |
 |---------------|----------------------------------------------------|
-| VITE_API_URL  | The URL of the API endpoint that the frontend consumes. For local development, it is set to `http://localhost:5138/`. Ensure it points to the correct API server address. |
+| VITE_API_URL  | The URL of the API endpoint that the frontend consumes. For local development, it is set to `http://localhost:5138/`. Ensure it points to the correct API server address. In case you are using docker on the backend, the URL might be `http://localhost:5000/` |
 
 <br />
 

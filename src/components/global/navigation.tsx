@@ -13,16 +13,16 @@ export const Navigation = () => {
 
   return (
     <header className="flex h-12 w-full items-center justify-center gap-3 border-b-2 border-solid border-muted bg-background px-4">
-      <div className="max-w-content flex h-12 w-full items-center justify-between">
+      <div className="flex h-12 w-full max-w-content items-center justify-between">
         <span className="flex h-12 items-center gap-2">
           <GrGroup />
-          <h3 className="">Client Manager</h3>
+          <h3 className="">Customer Manager</h3>
         </span>
         <div className="flex items-center gap-6">
           <nav>
             <Link
               to="/"
-              className="text-strong rounded-sm  px-2 py-1 text-sm transition-all duration-150 hover:bg-foreground/10 hover:text-foreground hover:underline"
+              className="rounded-sm px-2  py-1 text-sm text-strong transition-all duration-150 hover:bg-foreground/10 hover:text-foreground hover:underline"
             >
               Customers
             </Link>
